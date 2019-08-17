@@ -6,9 +6,6 @@ class BruteForce:
         super().__init__()
         self.X = X
 
-    def build(self):
-        self.root = self.create_level(self.X, np.arange(len(self.X)), 0)
-
     def radius_neighbors(self, p, radius):
         dist = self.dist(p[None], self.X)
         indices = np.arange(len(self.X), dtype=np.int32)

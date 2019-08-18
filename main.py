@@ -1,19 +1,18 @@
 import numpy as np
 import timeit
 
-
 from ball_tree import BallTree
 from brute_force import BruteForce
 
 
 setup_str_base = '''
-n, d = 2**18, 12
+n, d = 2**20, 12
 X = np.random.rand(n, d)
 p = X[0]
 radius = 0.4
 '''
 setup_str_bt = setup_str_base + '''
-nbrs = BallTree(X, max_leaf_points=2**13)
+nbrs = BallTree(X, max_leaf_points=2**14)
 '''
 setup_str_bf = setup_str_base + '''
 nbrs = BruteForce(X)
@@ -21,11 +20,9 @@ nbrs = BruteForce(X)
 
 
 def check(stmt, setup_str):
-    n = 2
-    times = timeit.Timer(stmt, globals=globals(), setup=setup_str).repeat(7, n)
-    mean = np.mean(times) / n * 1000
-    std = np.std(times) / n * 1000
-    print('{} += {} ms per call'.format(mean, std))
+    n, s = timeit.Timer(stmt, globals=globals(), setup=setup_str).autorange()
+    mean = s / n * 1000
+    print(f'{mean:.2f} ms per call ({n} trials)')
 
 
 def main():
@@ -39,8 +36,6 @@ def main():
     radius = 0.4
     ball_tree_inds = BallTree(X).radius_neighbors(p, radius)
     brute_force_inds = BruteForce(X).radius_neighbors(p, radius)
-    print('ball_tree_inds', ball_tree_inds)
-    print('brute_force_inds', brute_force_inds)
     print(ball_tree_inds == brute_force_inds)
 
 

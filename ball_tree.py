@@ -65,9 +65,9 @@ class BallTree:
             if self.verbose:
                 print('leaf at level {}, {}/{} points are within radius'.format(node.level, len(indices), len(X)))
             return indices
-        d = self.dist(p[None], node.center) ** 0.5
-        r = node.radius ** 0.5
-        if d - r > radius ** 0.5:
+        d = self.dist(p[None], node.center)
+        r = node.radius
+        if d > r and d + r - 2 * (d * r) ** 0.5 > radius:  # same as if d ** 0.5 - r ** 0.5 > radius ** 0.5
             if self.verbose:
                 print('reject node at level {}'.format(node.level))
             return []  # Reject this node since it's too far away

@@ -72,16 +72,9 @@ class BallTree:
                 print('reject node at level {}'.format(node.level))
             return []  # Reject this node since it's too far away
 
-        dist_left = self.dist(p[None], node.left.center)
-        dist_right = self.dist(p[None], node.right.center)
-        if dist_left < dist_right:
-            closer, further = node.left, node.right
-        else:
-            closer, further = node.right, node.left
-
-        closer_inds = self._search_level(p, radius, closer)
-        further_inds = self._search_level(p, radius, further)
-        return np.concatenate([closer_inds, further_inds], axis=0).astype(np.int32)
+        left_inds = self._search_level(p, radius, node.left)
+        right_inds = self._search_level(p, radius, node.right)
+        return np.concatenate([left_inds, right_inds], axis=0).astype(np.int32)
 
     def dist(self, P, X):
         dist = ((P - X) ** 2).sum(axis=1)  # (n,)

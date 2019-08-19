@@ -36,11 +36,11 @@ class BallTree:
         X_sorted = X[order]
         indices_sorted = indices[order]
         pivot = n // 2
-        center = X[pivot]
+        center = X_sorted[pivot]
         radius = self.dist(center[None], X_sorted).max()
 
         if n <= self.max_leaf_points:
-            node = Node(level, center, radius, X, indices, isleaf=True)
+            node = Node(level, center, radius, X_sorted, indices_sorted, isleaf=True)
         else:
             X_left = X_sorted[:pivot]
             X_right = X_sorted[pivot:]
